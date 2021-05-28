@@ -356,7 +356,7 @@ function list(path) {
     // 開始從第1頁請求數據
     requestListPath(path, { password }, successResultCallback, (path) => {
         $('#spinner').remove()
-        let pass = prompt('目錄加密, 請輸入密碼', '')
+        let pass = prompt('通關密語', '')
         localStorage.setItem(`password${path}`, pass)
         if (pass != null && pass != '') {
             list(path)
@@ -400,10 +400,12 @@ function append_files_to_list(path, files) {
             } else if (/完結/.test(item.name)) {
                 className = 'finish'
                 imageUrls.push(`${p}%E5%B0%81%E9%9D%A2.webp`) // 封面url存入陣列
-            } else if (/R18/.test(item.name)) {
-                className = 'r18'
-            } else {
-                className = ''
+            } else if (/劇場版/.test(item.name)) {
+                className = 'movie'
+                imageUrls.push(`${p}%E5%B0%81%E9%9D%A2.webp`)
+            } else if(/其他/.test(item.name)) {
+                className = 'other'
+                imageUrls.push(`${p}%E5%B0%81%E9%9D%A2.webp`)
             }
             html += `<li class="mdui-list-item mdui-ripple mdui-shadow-2 clickFolder"><a href="${p}" class="folder">
                 <div class="mdui-col-xs-12 mdui-col-sm-10 mdui-text-truncate ${className}"><i class="mdui-icon material-icons">folder_open</i> ${item.name}</div>
@@ -647,10 +649,10 @@ function append_search_result_to_list(files) {
                 className = 'updating'
             } else if (/完結/.test(item.name)) {
                 className = 'finish'
-            } else if (/R18/.test(item.name)) {
-                className = 'r18'
-            } else {
-                className = ''
+            } else if (/劇場版/.test(item.name)) {
+                className = 'movie'
+            } else if (/其他/.test(item.name)) {
+                className = 'other'
             }
             html += `<li class="mdui-list-item mdui-ripple mdui-shadow-2 clickFolder"><a id="${item['id']}" onclick="onSearchResultItemClick(this)" class="folder">
                     <div class="mdui-col-xs-12 mdui-col-sm-10 mdui-text-truncate ${className}"><i class="mdui-icon material-icons">folder_open</i> ${item.name}</div>
@@ -664,6 +666,8 @@ function append_search_result_to_list(files) {
                 case '!head.md':
                     continue
                 case '封面.webp':
+                    continue
+                case '!readme.md':
                     continue
             }
             if (
@@ -720,7 +724,7 @@ function onSearchResultItemClick(a_ele) {
         dialog.close()
         dialog = mdui.dialog({
             title: '獲取目標路徑失敗',
-            content: '該資源可能已經移除，或已移動，請通知 NekoChan#2851 解決。',
+            content: '該資源可能已經移除，或已移動。',
             history: false,
             modal: true,
             closeOnEsc: true,
@@ -906,7 +910,7 @@ function file_video(path) {
     ${playBtn}
     ${switchElement}
     <div class="mdui-textfield">
-        <label class="mdui-textfield-label mdui-text-color-white">注意：若影片沒有畫面，請嘗試播放器串流。或通知 Discord：NekoChan#2851。</label>
+        <label class="mdui-textfield-label mdui-text-color-white">注意：若影片沒有畫面，請嘗試播放器串流。</label>
     </div>
     <hr>
     </div>`
